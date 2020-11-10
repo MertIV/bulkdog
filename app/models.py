@@ -44,5 +44,6 @@ class Message(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     receiver_list = db.Column(db.PickleType)
 
+
     def __repr__(self):
         return '<Message {}>'.format(self.body)

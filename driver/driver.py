@@ -41,13 +41,12 @@ class MessageBot:
             el = WebDriverWait(self.driver, 15).until(EC.presence_of_element_located(
                 (By.XPATH, '//*[@id="side"]/header/div[2]/div/span/div[2]/div')))
             print(el.get_attribute("title"))
-            print('You are in bro')
-        except:
-            print('Problem var')
+            return True
+        except Timeout:
+            self.login()
 
-    def hit_number(self, phone_number, first_html=None):
+    def hit_number(self, phone_number):
         try:
-            phone_number = self.format_number(phone_number)
             self.driver.get('https://web.whatsapp.com/send?phone={}'.format(phone_number))
 
             el2 = WebDriverWait(self.driver, 15).until(EC.presence_of_element_located(
@@ -133,9 +132,12 @@ class MessageBot:
     def format_number(self, phone_number):
         phone_number = phone_number.replace(" ", "").replace("+", "").strip()
         if len(phone_number) == 10:
-            phone_number = "+90{}".format(phone_number)
-        # print(phone_number)
+            phone_number = "90{}".format(phone_number)
         return phone_number
+
+    def __del__(self):
+        print("Shutting down chrome")
+        self.driver.close()
 
 
 # app1 = MessageBot()
