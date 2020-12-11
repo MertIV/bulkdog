@@ -12,6 +12,7 @@ from werkzeug.urls import url_parse
 from werkzeug.utils import secure_filename
 from datetime import datetime
 
+
 @app.before_request
 def before_request():
     if current_user.is_authenticated:
