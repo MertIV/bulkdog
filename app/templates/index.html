@@ -1,9 +1,44 @@
+
 <!DOCTYPE html>
 {% extends "base.html" %}
 
+
 {% block content %}
     <h1>Hi, {{ current_user.username }}!</h1>
-    {% for post in posts %}
-    <div><p>{{ message.author.username }} sent the message: <b>{{ message.body }}</b></p></div>
+    {% if form %}
+        <form method="POST" action="" enctype="multipart/form-data">
+             {{ form.hidden_tag() }}
+            <p>
+                {{ form.file.label }}<br>
+                {{ form.file }}<br>
+                {% for error in form.file.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+            <p>
+                {{ form.image.label }}<br>
+                {{ form.image }}<br>
+                {% for error in form.image.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+            <p>
+                {{ form.message.label }}<br>
+                {{ form.message(cols=32, rows=4) }}<br>
+                {% for error in form.message.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+            <p>{{ form.submit() }}</p>
+        </form>
+    {% endif %}
+    <hr>
+    {% for file in files %}
+      <img src="{{ url_for('upload', filename=file) }}" style="width: 128px">
+    {% endfor %}
+    {% for message in messages %}
+    <p>
+    {{ message.author.username }} says: <b>{{ message.body }}</b>
+    </p>
     {% endfor %}
 {% endblock %}

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+
+{% extends "base.html" %}
+
+{% block content %}
+    <table>
+        <tr valign="top">
+            <td> <h1>File Upload</h1>
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.1/min/dropzone.min.css"></td>
+        </tr>
+        <tr>
+             <td>
+                    <form action="{{ url_for('upload_files') }}" class="dropzone">
+                    </form>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.1/min/dropzone.min.js"></script></td>
+        </tr>
+    </table>
+{% endblock %}
+
+
+{##}
+{#    <h1>File Upload</h1>#}
+{#    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.1/min/dropzone.min.css">#}
+{#     <form action="{{ url_for('upload_files') }}" class="dropzone">#}
+{#    </form>#}
+{#    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.1/min/dropzone.min.js"></script>#}

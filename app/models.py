@@ -38,12 +38,41 @@ def load_user(id):
 
 class Message(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    body = db.Column(db.String(140))
     attachment = db.Column(db.String())
+    template_body = db.Column(db.String())
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    receiver_list = db.Column(db.PickleType)
-
 
     def __repr__(self):
-        return '<Message {}>'.format(self.body)
+        return '<Message {}>'.format(self.id)
+
+
+class Customer(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    customer_phone = db.Column(db.String(13), index=True, unique=True)
+    customer_status = db.Column(db.Integer)
+    insert_date = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    update_date = db.Column(db.DateTime)
+
+    def __repr__(self):
+        return '<Customer {}>'.format(self.id)
+
+# #
+# class MessageDetail(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     md_id = db.Column(db.Integer)
+#     m_id = db.Column(db.Integer, db.ForeignKey('message.id'))
+#     attachment_path = db.Column(db.String)
+#     insert_date = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+#     update_date = db.Column(db.DateTime)
+#
+#     def __repr__(self):
+#         return '<MessageDetail {}>'.format(self.body)
+#
+# #
+# # message_activity = db.Table('Message_Activity', db.Column('u_id', db.Integer, db.ForeignKey('User.id')),
+# #                             db.Column('c_id', db.Integer, db.ForeignKey('Costumer.id')),
+# #                             db.Column('m_id', db.Integer, db.ForeignKey('Message.id')),
+# #                             db.Column('template_body', db.String, db.ForeignKey('Message.template_body')),
+# #                             db.Column('send_date', db.DateTime))
+# #

@@ -1,17 +1,66 @@
-from flask import render_template ,flash , redirect , url_for
+import os, imghdr
+import pandas as pd
+import jsonpickle
+from flask import render_template, flash, redirect, url_for, send_from_directory, jsonify
 from flask import request
 from app import app,db
-from app.forms import LoginForm, RegistrationForm, EditProfileForm
-from driver import driver
+from app.forms import LoginForm, RegistrationForm, EditProfileForm, MessageForm
+from driver.webdriver import Task
 from flask_login import current_user, login_user, logout_user, login_required
 from app.models import User
 from werkzeug.urls import url_parse
+from werkzeug.utils import secure_filename
 from datetime import datetime
 
+@app.before_request
+def before_request():
+    if current_user.is_authenticated:
+        current_user.last_seen = datetime.utcnow()
+        db.session.commit()
 
-@app.route('/')
-@app.route('/index')
+
+def validate_image(stream):
+    header = stream.read(512)
+    stream.seek(0)
+    format = imghdr.what(None, header)
+    if not format:
+        return None
+    return '.' + (format if format != 'jpeg' else 'jpg')
+
+
+@app.route('/', methods=['GET', 'POST'])
+@app.route('/index', methods=['GET', 'POST'])
+@login_required
 def index():
+    form = MessageForm()
+    if form.validate_on_submit():
+        uploaded_image = request.files['image']
+        image_name = secure_filename(uploaded_image.filename)
+        uploaded_file = request.files['file']
+        file_name = secure_filename(uploaded_file.filename)
+        if image_name != '' and file_name != '':
+            file_ext = os.path.splitext(image_name)[1]
+            if file_ext not in app.config['UPLOAD_EXTENSIONS']:
+                return "Invalid image", 400
+            uploaded_image.save(os.path.join(app.config['UPLOAD_PATH'], image_name))
+            data_xls = pd.read_excel(uploaded_file)
+
+            template = form_template(form)
+            user_id = current_user.id
+            attachment = os.path.join(app.config['UPLOAD_PATH'], image_name)
+            body = form.message.data
+            receiver_list = data_xls.dropna(subset=['numbers']).to_json()
+
+            task = Task(user_id, template, attachment, body, receiver_list)
+
+            flash('Hayırlı olsun!!')
+            #return data_xls.to_html()
+            #return redirect(url_for('index'))
+            frozen = jsonpickle.encode(task)
+            return frozen
+        return '', 204
+
+    files = os.listdir(app.config['UPLOAD_PATH'])
     user = {'username': 'Miguel'}
     messages = [
         {
@@ -23,7 +72,7 @@ def index():
             'body': 'The Avengers movie was so cool!'
         }
     ]
-    return render_template('index.html', title='Home', messages=messages)
+    return render_template('index.html', title='Home', messages=messages, form=form, files=files)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -48,13 +97,6 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for('index'))
-
-
-@app.before_request
-def before_request():
-    if current_user.is_authenticated:
-        current_user.last_seen = datetime.utcnow()
-        db.session.commit
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -86,7 +128,7 @@ def user(username):
 @app.route('/edit_profile', methods=['GET', 'POST'])
 @login_required
 def edit_profile():
-    form = EditProfileForm()
+    form = EditProfileForm(current_user.username)
     if form.validate_on_submit():
         current_user.username = form.username.data
         current_user.about_me = form.about_me.data
@@ -100,5 +142,41 @@ def edit_profile():
         form.phone_number.data = current_user.phone_number
     return render_template('edit_profile.html', title='Edit Profile',
                            form=form)
+
+
+@app.route('/upload_files', methods=['GET', 'POST'])
+@login_required
+def upload_files():
+    if request.method == 'POST':
+        uploaded_file = request.files['file']
+        filename = secure_filename(uploaded_file.filename)
+        if filename != '':
+            file_ext = os.path.splitext(filename)[1]
+            if file_ext not in app.config['UPLOAD_EXTENSIONS']:
+                    #file_ext != validate_image(uploaded_file.stream):
+                return "Invalid image", 400
+            uploaded_file.save(os.path.join(app.config['UPLOAD_PATH'], filename))
+    return render_template('upload_files.html', title='Upload Image')
+
+
+@app.route('/uploads/<filename>')
+@login_required
+def upload(filename):
+    return send_from_directory(os.path.join(
+        app.config['UPLOAD_PATH']), filename)
+
+
+def form_template(form):
+    #0 for text 1 for image 2 for image with text
+    template = []
+    for field in form:
+        if field.type == "FileField" and field.name == 'image':
+            template.append('1')
+        elif field.type == "TextAreaField":
+            template.append('0')
+
+    return template
+
+
 
 

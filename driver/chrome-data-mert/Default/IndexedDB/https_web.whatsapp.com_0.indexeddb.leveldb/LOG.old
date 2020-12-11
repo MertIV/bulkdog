@@ -1,3 +1,23 @@
-2020/11/09-11:15:25.663 2d70 Reusing MANIFEST C:\Users\msi-\Desktop\Enterpreneur\bulkdog\driver\chrome-data-mert\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/MANIFEST-000001
-2020/11/09-11:15:25.664 2d70 Recovering log #37
-2020/11/09-11:15:25.692 2d70 Reusing old log C:\Users\msi-\Desktop\Enterpreneur\bulkdog\driver\chrome-data-mert\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/000037.log 
+2020/11/30-14:11:47.073 2fbc Reusing MANIFEST C:\Users\msi-\Desktop\Enterpreneur\bulkdog\driver\chrome-data-mert\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/MANIFEST-000001
+2020/11/30-14:11:47.074 2fbc Recovering log #339
+2020/11/30-14:11:47.135 2fbc Reusing old log C:\Users\msi-\Desktop\Enterpreneur\bulkdog\driver\chrome-data-mert\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/000339.log 
+2020/11/30-14:12:39.277 3a98 Level-0 table #349: started
+2020/11/30-14:12:39.338 3a98 Level-0 table #349: 1131332 bytes OK
+2020/11/30-14:12:39.342 3a98 Delete type=0 #339
+2020/11/30-14:12:41.467 1794 Compacting 1@1 + 6@2 files
+2020/11/30-14:12:41.641 1794 Generated table #350@1: 38739 keys, 2179218 bytes
+2020/11/30-14:12:41.786 1794 Generated table #351@1: 38380 keys, 2177937 bytes
+2020/11/30-14:12:41.949 1794 Generated table #352@1: 104485 keys, 2278597 bytes
+2020/11/30-14:12:42.105 1794 Generated table #353@1: 36704 keys, 2288103 bytes
+2020/11/30-14:12:42.252 1794 Generated table #354@1: 36262 keys, 2285112 bytes
+2020/11/30-14:12:42.372 1794 Generated table #355@1: 83541 keys, 2258594 bytes
+2020/11/30-14:12:42.392 1794 Generated table #356@1: 9607 keys, 362572 bytes
+2020/11/30-14:12:42.392 1794 Compacted 1@1 + 6@2 files => 13830133 bytes
+2020/11/30-14:12:42.394 1794 compacted to: files[ 0 0 7 0 0 0 0 ]
+2020/11/30-14:12:42.395 1794 Delete type=2 #341
+2020/11/30-14:12:42.395 1794 Delete type=2 #342
+2020/11/30-14:12:42.395 1794 Delete type=2 #343
+2020/11/30-14:12:42.395 1794 Delete type=2 #344
+2020/11/30-14:12:42.395 1794 Delete type=2 #345
+2020/11/30-14:12:42.395 1794 Delete type=2 #346
+2020/11/30-14:12:42.396 1794 Delete type=2 #349
